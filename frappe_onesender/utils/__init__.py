@@ -1,6 +1,6 @@
 """Run on each event."""
 import frappe
-
+from PIL import Image
 import pdf2image
 from frappe.core.doctype.server_script.server_script_utils import EVENT_MAP
 from croniter import croniter
@@ -130,8 +130,10 @@ def trigger_onesender_notifications_cron(run_now=False):
 def get_pdf_link_as_image(doctype, docname, print_format="Standard", no_letterhead=0):
     return f"/api/method/frappe_onesender.utils.download_document_print_as_image?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}"
 
+
 @frappe.whitelist(allow_guest=True)
-def download_document_print_as_image(doctype: str,
+def download_document_print_as_image(
+	doctype: str,
 	name: str,
 	format=None,
 	doc=None,
@@ -139,29 +141,50 @@ def download_document_print_as_image(doctype: str,
 	language=None,
 	letterhead=None,
 	pdf_generator: Literal["wkhtmltopdf", "chrome"] | None = None,
-    ):
-        doc = doc or frappe.get_doc(doctype, name)
-        validate_print_permission(doc)
+):
+	doc = doc or frappe.get_doc(doctype, name)
+	validate_print_permission(doc)
 
-        with print_language(language):
-            pdf_file = frappe.get_print(
-                doctype,
-                name,
-                format,
-                doc=doc,
-                as_pdf=True,
-                letterhead=letterhead,
-                no_letterhead=no_letterhead,
-                pdf_generator=pdf_generator,
-            )
+	with print_language(language):
+		pdf_file = frappe.get_print(
+			doctype,
+			name,
+			format,
+			doc=doc,
+			as_pdf=True,
+			letterhead=letterhead,
+			no_letterhead=no_letterhead,
+			pdf_generator=pdf_generator,
+		)
 
-            images = pdf2image.convert_from_bytes(pdf_file, dpi=200, single_file=True, fmt="jpeg")
-        raw = io.BytesIO()
-        images[0].save(raw, format="JPEG")
-        response = Response()
-        filename = "{name}.jpeg".format(name=name.replace(" ", "-").replace("/", "-"))
-        filename = filename.encode("utf-8").decode("unicode-escape", "ignore")
-        response.headers.add("Content-Disposition", None, filename=filename)
-        response.data = raw.getvalue()
-        response.mimetype = "image/jpeg"
-        return response
+	# Convert all pages to image (list of PIL Images)
+	pages = pdf2image.convert_from_bytes(pdf_file, dpi=150)
+
+	if not pages:
+		frappe.throw("PDF conversion returned no pages")
+
+	# Get combined image dimensions (vertical stacking)
+	width = pages[0].width
+	total_height = sum(page.height for page in pages)
+
+	# Create new blank image
+	combined = Image.new("RGB", (width, total_height), color=(255, 255, 255))
+
+	# Paste all pages vertically
+	y_offset = 0
+	for page in pages:
+		combined.paste(page, (0, y_offset))
+		y_offset += page.height
+
+	# Save to bytes
+	raw = io.BytesIO()
+	combined.save(raw, format="JPEG")
+	raw.seek(0)
+
+	# Create response
+	filename = f"{name.replace(' ', '-').replace('/', '-')}.jpeg"
+	response = Response()
+	response.headers.add("Content-Disposition", "inline", filename=filename)
+	response.data = raw.getvalue()
+	response.mimetype = "image/jpeg"
+	return response
