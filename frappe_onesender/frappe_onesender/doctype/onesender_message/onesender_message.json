@@ -1,0 +1,155 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-30 02:02:51.430491",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "os_app",
+  "to",
+  "content_type",
+  "attach_with_doctype",
+  "attach_document_name",
+  "attach",
+  "attach_doctype",
+  "attach_docname",
+  "column_break_5",
+  "message",
+  "onesender_notification",
+  "status",
+  "section_break_odey",
+  "details",
+  "data"
+ ],
+ "fields": [
+  {
+   "allow_in_quick_entry": 1,
+   "description": "Mobile number with country code",
+   "fieldname": "to",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "TO ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "message",
+   "fieldtype": "Text",
+   "label": "Message",
+   "reqd": 1
+  },
+  {
+   "fieldname": "content_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "text\ndocument\nimage",
+   "reqd": 1
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "depends_on": "eval:((doc.content_type =='document' || doc.content_type =='image') && (doc.attach_with_doctype === 0))",
+   "fieldname": "attach",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "os_app",
+   "fieldtype": "Link",
+   "label": "OneSender",
+   "options": "OneSender App",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:(doc.attach_with_doctype === 1)",
+   "fieldname": "attach_doctype",
+   "fieldtype": "Link",
+   "label": "Doctype",
+   "mandatory_depends_on": "eval:(doc.attach_with_doctype == 1)",
+   "options": "DocType"
+  },
+  {
+   "depends_on": "eval:(doc.attach_doctype != \"\")",
+   "fieldname": "attach_docname",
+   "fieldtype": "Link",
+   "label": "Docname",
+   "mandatory_depends_on": "eval:(doc.attach_doctype != \"\")",
+   "options": "User"
+  },
+  {
+   "fieldname": "onesender_notification",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Notification",
+   "options": "OneSender Notification"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Complete\nFailed"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:(doc.content_type =='document' || doc.content_type =='image')",
+   "fieldname": "attach_with_doctype",
+   "fieldtype": "Check",
+   "label": "Attach With Doctype"
+  },
+  {
+   "fieldname": "section_break_odey",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Code",
+   "label": "Details",
+   "read_only": 1
+  },
+  {
+   "fieldname": "data",
+   "fieldtype": "Code",
+   "label": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attach_document_name",
+   "fieldtype": "Data",
+   "label": "Document Name"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-05 17:46:16.827226",
+ "modified_by": "Administrator",
+ "module": "Frappe Onesender",
+ "name": "OneSender Message",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

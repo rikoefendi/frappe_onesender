@@ -1,0 +1,258 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:notification_name",
+ "creation": "2025-06-30 07:04:58.515829",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "notification_name",
+  "notification_type",
+  "reference_doctype",
+  "field_name",
+  "event_frequency",
+  "cron_expression",
+  "run_at_datetime",
+  "interval_every",
+  "interval_unit",
+  "run_time",
+  "weekday_days",
+  "monthday_days",
+  "doctype_event",
+  "column_break_3",
+  "os_app",
+  "disabled",
+  "attach_document_print",
+  "attach_document_print_as_image",
+  "attach_document_name",
+  "condition",
+  "section_break_giqn",
+  "last_run_at",
+  "column_break_vkub",
+  "next_run_at",
+  "section_break_11",
+  "message",
+  "message_examples"
+ ],
+ "fields": [
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Reference Document Type",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.notification_type == \"Scheduler Event\"",
+   "fieldname": "event_frequency",
+   "fieldtype": "Select",
+   "label": "Event Frequency",
+   "mandatory_depends_on": "eval:doc.notification_type == \"Scheduler Event\"",
+   "options": "Cron\nAt Regular Intervals\nOnce\nEvery Day\nDays Of The Week\nDates Of The Month"
+  },
+  {
+   "depends_on": "eval:doc.notification_type==='DocType Event'",
+   "fieldname": "doctype_event",
+   "fieldtype": "Select",
+   "label": "DocType Event",
+   "options": "Before Insert\nBefore Validate\nBefore Save\nAfter Insert\nAfter Save\nBefore Submit\nAfter Submit\nBefore Cancel\nAfter Cancel\nBefore Delete\nAfter Delete\nBefore Save (Submitted Document)\nAfter Save (Submitted Document)"
+  },
+  {
+   "depends_on": "eval:doc.event_frequency == 'Once'",
+   "description": "Date and time to run (for Once)",
+   "fieldname": "run_at_datetime",
+   "fieldtype": "Datetime",
+   "label": "Run At",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'Once'"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval:doc.event_frequency == 'At Regular Intervals'",
+   "description": "Run every X unit(s)",
+   "fieldname": "interval_every",
+   "fieldtype": "Int",
+   "label": "Every",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'At Regular Intervals'"
+  },
+  {
+   "default": "Minutes",
+   "depends_on": "eval:doc.event_frequency == 'At Regular Intervals'",
+   "fieldname": "interval_unit",
+   "fieldtype": "Select",
+   "label": "Interval Unit",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'At Regular Intervals'",
+   "options": "Minutes\nHours\nDays\nWeeks"
+  },
+  {
+   "depends_on": "eval:['Every Day', 'Days Of The Week', 'Dates Of The Month'].includes(doc.event_frequency) || (doc.event_frequency == 'At Regular Intervals' && ['Days', 'Weeks'].includes(doc.interval_unit))",
+   "fieldname": "run_time",
+   "fieldtype": "Time",
+   "label": "Run Time",
+   "mandatory_depends_on": "eval:['Every Day', 'Days Of The Week', 'Dates Of The Month'].includes(doc.event_frequency) || (doc.event_frequency == 'At Regular Intervals' && ['Days', 'Weeks'].includes(doc.interval_unit))"
+  },
+  {
+   "depends_on": "eval:doc.event_frequency == 'Days Of The Week'",
+   "description": "Days to run on",
+   "fieldname": "weekday_days",
+   "fieldtype": "Data",
+   "label": "Days of the Week",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'Days Of The Week'"
+  },
+  {
+   "depends_on": "eval:doc.event_frequency == 'Dates Of The Month'",
+   "description": "Days in month to run",
+   "fieldname": "monthday_days",
+   "fieldtype": "Data",
+   "label": "Days of the Month",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'Dates Of The Month'"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
+  },
+  {
+   "fieldname": "notification_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Notification Type",
+   "options": "DocType Event\nScheduler Event",
+   "reqd": 1
+  },
+  {
+   "fieldname": "condition",
+   "fieldtype": "Code",
+   "ignore_xss_filter": 1,
+   "label": "Condition"
+  },
+  {
+   "description": "Mobile number field",
+   "fieldname": "field_name",
+   "fieldtype": "Data",
+   "label": "Field Name",
+   "mandatory_depends_on": "eval:['DocType Event'].includes(doc.notification_type)"
+  },
+  {
+   "fieldname": "section_break_11",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "description": "Attach Printed Document",
+   "fieldname": "attach_document_print",
+   "fieldtype": "Check",
+   "label": " Attach Document Print"
+  },
+  {
+   "fieldname": "notification_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Notification Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Text",
+   "label": "Message"
+  },
+  {
+   "fieldname": "message_examples",
+   "fieldtype": "HTML",
+   "label": "Message Examples",
+   "options": "<h5>Message Example</h5>\n\n<pre>&lt;h3&gt;Order Overdue&lt;/h3&gt;\n\n&lt;p&gt;Transaction {{ doc.name }} has exceeded Due Date. Please take necessary action.&lt;/p&gt;\n\n&lt;!-- show last comment --&gt;\n{% if comments %}\nLast comment: {{ comments[-1].comment }} by {{ comments[-1].by }}\n{% endif %}\n\n&lt;h4&gt;Details&lt;/h4&gt;\n\n&lt;ul&gt;\n&lt;li&gt;Customer: {{ doc.customer }}\n&lt;li&gt;Amount: {{ doc.grand_total }}\n&lt;/ul&gt;\n</pre>"
+  },
+  {
+   "fieldname": "os_app",
+   "fieldtype": "Link",
+   "label": "OneSender",
+   "options": "OneSender App",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:(doc.notification_type == \"Scheduler Event\" && doc.event_frequency == \"Cron\")",
+   "fieldname": "cron_expression",
+   "fieldtype": "Data",
+   "label": "Cron Expression",
+   "mandatory_depends_on": "eval:(doc.notification_type == \"Scheduler Event\" && doc.event_frequency == \"Cron\")"
+  },
+  {
+   "fieldname": "section_break_giqn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "last_run_at",
+   "fieldtype": "Datetime",
+   "label": "Last Run At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_vkub",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_run_at",
+   "fieldtype": "Datetime",
+   "label": "Next Run At",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:(doc.attach_document_print == 1)",
+   "description": "Attach Doument Print as Image",
+   "fieldname": "attach_document_print_as_image",
+   "fieldtype": "Check",
+   "label": " Attach as Image"
+  },
+  {
+   "depends_on": "eval:(doc.attach_document_print == 1)",
+   "fieldname": "attach_document_name",
+   "fieldtype": "Data",
+   "label": "File Name",
+   "mandatory_depends_on": "eval:(doc.attach_document_print == 1)"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "OneSender Message",
+   "link_fieldname": "onesender_notification"
+  }
+ ],
+ "modified": "2025-07-05 18:14:31.580909",
+ "modified_by": "Administrator",
+ "module": "Frappe Onesender",
+ "name": "OneSender Notification",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Script Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

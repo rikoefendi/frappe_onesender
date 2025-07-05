@@ -1,5 +1,5 @@
 app_name = "frappe_onesender"
-app_title = "Frappe Onesender"
+app_title = "Frappe OneSender"
 app_publisher = "MKB"
 app_description = "Frappe integration OneSender(Wa Api Gateway)"
 app_email = "web.madinakebab@gmail.com"
@@ -11,22 +11,22 @@ app_license = "unlicense"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "frappe_onesender",
-# 		"logo": "/assets/frappe_onesender/logo.png",
-# 		"title": "Frappe Onesender",
-# 		"route": "/frappe_onesender",
-# 		"has_permission": "frappe_onesender.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "frappe_onesender",
+		"logo": "/assets/frappe_onesender/logo.png",
+		"title": "Frappe OneSender",
+		"route": "/frappe_os",
+		"has_permission": "frappe_onesender.api.permission.has_app_permission"
+	}
+]
 
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/frappe_onesender/css/frappe_onesender.css"
-# app_include_js = "/assets/frappe_onesender/js/frappe_onesender.js"
+app_include_js = ["/assets/frappe_onesender/js/attach.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/frappe_onesender/css/frappe_onesender.css"
@@ -137,35 +137,35 @@ app_license = "unlicense"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+
+doc_events = {
+    "*": {
+        "before_insert": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "after_insert": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "before_validate": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "validate": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "on_update": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "before_submit": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "on_submit": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "before_cancel": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "on_cancel": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "on_trash": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "after_delete": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "before_update_after_submit": "frappe_onesender.utils.run_server_script_for_doc_event",
+        "on_update_after_submit": "frappe_onesender.utils.run_server_script_for_doc_event"
+    }
+}
+
 
 # Scheduled Tasks
 # ---------------
-
-# scheduler_events = {
-# 	"all": [
-# 		"frappe_onesender.tasks.all"
-# 	],
-# 	"daily": [
-# 		"frappe_onesender.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"frappe_onesender.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"frappe_onesender.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"frappe_onesender.tasks.monthly"
-# 	],
-# }
-
+scheduler_events = {
+    "cron": {
+        "* * * * *": [
+            "frappe_onesender.utils.trigger_onesender_notifications_cron",
+        ]
+    }
+}
 # Testing
 # -------
 
