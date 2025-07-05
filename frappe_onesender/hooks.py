@@ -16,8 +16,7 @@ add_to_apps_screen = [
 		"name": "frappe_onesender",
 		"logo": "/assets/frappe_onesender/logo.png",
 		"title": "Frappe OneSender",
-		"route": "/frappe_os",
-		"has_permission": "frappe_onesender.api.permission.has_app_permission"
+		"route": "/frappe_os"
 	}
 ]
 
