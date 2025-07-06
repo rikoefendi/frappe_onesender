@@ -128,7 +128,7 @@ def trigger_onesender_notifications_cron(run_now=False):
             doc.notify_scheduled()
 
 def get_pdf_link_as_image(doctype, docname, print_format="Standard", no_letterhead=0):
-    return f"/api/method/frappe_onesender.utils.download_document_print_as_image?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}"
+    return f"/api/method/onesender.utils.download_document_print_as_image?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}"
 
 
 @frappe.whitelist(allow_guest=True)

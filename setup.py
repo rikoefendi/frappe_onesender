@@ -4,10 +4,10 @@ with open("requirements.txt") as f:
     install_requires = f.read().strip().split("\n")
 
 # get version from __version__ variable in frappe_whatsapp/__init__.py
-from frappe_onesender import __version__ as version
+from onesender import __version__ as version
 
 setup(
-    name="frappe_onesender",
+    name="onesender",
     version=version,
     description="OneSender integration for frappe",
     author="Madina Kebab",

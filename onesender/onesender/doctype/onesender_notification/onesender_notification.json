@@ -176,7 +176,7 @@
    "fieldname": "os_app",
    "fieldtype": "Link",
    "label": "OneSender",
-   "options": "OneSender App",
+   "options": "Onesender Device",
    "reqd": 1
   },
   {
@@ -230,9 +230,9 @@
    "link_fieldname": "onesender_notification"
   }
  ],
- "modified": "2025-07-05 18:14:31.580909",
+ "modified": "2025-07-06 18:17:05.603658",
  "modified_by": "Administrator",
- "module": "Frappe Onesender",
+ "module": "Onesender",
  "name": "OneSender Notification",
  "naming_rule": "By fieldname",
  "owner": "Administrator",

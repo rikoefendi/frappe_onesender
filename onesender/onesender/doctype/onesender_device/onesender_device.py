@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 
 
-class OneSenderApp(Document):
+class OnesenderDevice(Document):
 	"""OneSender App Connection"""
 	def validate(doc):
 		"""Validate only 1 default"""

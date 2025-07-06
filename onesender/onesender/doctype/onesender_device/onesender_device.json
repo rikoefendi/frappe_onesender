@@ -1,12 +1,12 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:app",
+ "autoname": "field:device",
  "creation": "2025-06-23 07:57:36.337132",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "app",
+  "device",
   "url",
   "secret",
   "is_default"
@@ -15,21 +15,15 @@
   {
    "fieldname": "secret",
    "fieldtype": "Data",
-   "label": "Secret",
+   "label": "API Key",
    "reqd": 1
   },
   {
    "fieldname": "url",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Endpoint",
+   "label": "API URL",
    "reqd": 1
-  },
-  {
-   "fieldname": "app",
-   "fieldtype": "Data",
-   "label": "Name",
-   "unique": 1
   },
   {
    "default": "0",
@@ -37,15 +31,21 @@
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Default"
+  },
+  {
+   "fieldname": "device",
+   "fieldtype": "Data",
+   "label": "Phone Number",
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-30 04:58:17.084173",
+ "modified": "2025-07-06 18:18:27.709856",
  "modified_by": "Administrator",
- "module": "Frappe OneSender",
- "name": "OneSender App",
+ "module": "Onesender",
+ "name": "Onesender Device",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

@@ -63,7 +63,7 @@
    "fieldname": "os_app",
    "fieldtype": "Link",
    "label": "OneSender",
-   "options": "OneSender App",
+   "options": "Onesender Device",
    "reqd": 1
   },
   {
@@ -129,9 +129,9 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-05 17:46:16.827226",
+ "modified": "2025-07-06 18:17:05.407367",
  "modified_by": "Administrator",
- "module": "Frappe Onesender",
+ "module": "Onesender",
  "name": "OneSender Message",
  "owner": "Administrator",
  "permissions": [

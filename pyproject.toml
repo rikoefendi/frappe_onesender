@@ -1,5 +1,5 @@
 [project]
-name = "frappe_onesender"
+name = "onesender"
 authors = [
     { name = "MKB", email = "web.madinakebab@gmail.com"}
 ]

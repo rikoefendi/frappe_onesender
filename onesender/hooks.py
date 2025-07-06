@@ -1,5 +1,5 @@
-app_name = "frappe_onesender"
-app_title = "Frappe OneSender"
+app_name = "onesender"
+app_title = "Onesender"
 app_publisher = "MKB"
 app_description = "Frappe integration OneSender(Wa Api Gateway)"
 app_email = "web.madinakebab@gmail.com"
@@ -11,28 +11,28 @@ app_license = "unlicense"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-add_to_apps_screen = [
-	{
-		"name": "frappe_onesender",
-		"logo": "/assets/frappe_onesender/logo.png",
-		"title": "Frappe OneSender",
-		"route": "/frappe_os"
-	}
-]
+# add_to_apps_screen = [
+# 	{
+# 		"name": "onesender",
+# 		"logo": "/assets/onesender/logo.png",
+# 		"title": "Frappe OneSender",
+# 		"route": "/frappe_os"
+# 	}
+# ]
 
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/frappe_onesender/css/frappe_onesender.css"
-app_include_js = ["/assets/frappe_onesender/js/attach.js"]
+# app_include_css = "/assets/onesender/css/onesender.css"
+app_include_js = ["/assets/onesender/js/attach.js"]
 
 # include js, css files in header of web template
-# web_include_css = "/assets/frappe_onesender/css/frappe_onesender.css"
-# web_include_js = "/assets/frappe_onesender/js/frappe_onesender.js"
+# web_include_css = "/assets/onesender/css/onesender.css"
+# web_include_js = "/assets/onesender/js/onesender.js"
 
 # include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "frappe_onesender/public/scss/website"
+# website_theme_scss = "onesender/public/scss/website"
 
 # include js, css files in header of web form
 # webform_include_js = {"doctype": "public/js/doctype.js"}
@@ -50,7 +50,7 @@ app_include_js = ["/assets/frappe_onesender/js/attach.js"]
 # Svg Icons
 # ------------------
 # include app icons in desk
-# app_include_icons = "frappe_onesender/public/icons.svg"
+# app_include_icons = "onesender/public/icons.svg"
 
 # Home Pages
 # ----------
@@ -74,43 +74,43 @@ app_include_js = ["/assets/frappe_onesender/js/attach.js"]
 
 # add methods and filters to jinja environment
 # jinja = {
-# 	"methods": "frappe_onesender.utils.jinja_methods",
-# 	"filters": "frappe_onesender.utils.jinja_filters"
+# 	"methods": "onesender.utils.jinja_methods",
+# 	"filters": "onesender.utils.jinja_filters"
 # }
 
 # Installation
 # ------------
 
-# before_install = "frappe_onesender.install.before_install"
-# after_install = "frappe_onesender.install.after_install"
+# before_install = "onesender.install.before_install"
+# after_install = "onesender.install.after_install"
 
 # Uninstallation
 # ------------
 
-# before_uninstall = "frappe_onesender.uninstall.before_uninstall"
-# after_uninstall = "frappe_onesender.uninstall.after_uninstall"
+# before_uninstall = "onesender.uninstall.before_uninstall"
+# after_uninstall = "onesender.uninstall.after_uninstall"
 
 # Integration Setup
 # ------------------
 # To set up dependencies/integrations with other apps
 # Name of the app being installed is passed as an argument
 
-# before_app_install = "frappe_onesender.utils.before_app_install"
-# after_app_install = "frappe_onesender.utils.after_app_install"
+# before_app_install = "onesender.utils.before_app_install"
+# after_app_install = "onesender.utils.after_app_install"
 
 # Integration Cleanup
 # -------------------
 # To clean up dependencies/integrations with other apps
 # Name of the app being uninstalled is passed as an argument
 
-# before_app_uninstall = "frappe_onesender.utils.before_app_uninstall"
-# after_app_uninstall = "frappe_onesender.utils.after_app_uninstall"
+# before_app_uninstall = "onesender.utils.before_app_uninstall"
+# after_app_uninstall = "onesender.utils.after_app_uninstall"
 
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
 
-# notification_config = "frappe_onesender.notifications.get_notification_config"
+# notification_config = "onesender.notifications.get_notification_config"
 
 # Permissions
 # -----------
@@ -139,19 +139,19 @@ app_include_js = ["/assets/frappe_onesender/js/attach.js"]
 
 doc_events = {
     "*": {
-        "before_insert": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "after_insert": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "before_validate": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "validate": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "on_update": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "before_submit": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "on_submit": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "before_cancel": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "on_cancel": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "on_trash": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "after_delete": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "before_update_after_submit": "frappe_onesender.utils.run_server_script_for_doc_event",
-        "on_update_after_submit": "frappe_onesender.utils.run_server_script_for_doc_event"
+        "before_insert": "onesender.utils.run_server_script_for_doc_event",
+        "after_insert": "onesender.utils.run_server_script_for_doc_event",
+        "before_validate": "onesender.utils.run_server_script_for_doc_event",
+        "validate": "onesender.utils.run_server_script_for_doc_event",
+        "on_update": "onesender.utils.run_server_script_for_doc_event",
+        "before_submit": "onesender.utils.run_server_script_for_doc_event",
+        "on_submit": "onesender.utils.run_server_script_for_doc_event",
+        "before_cancel": "onesender.utils.run_server_script_for_doc_event",
+        "on_cancel": "onesender.utils.run_server_script_for_doc_event",
+        "on_trash": "onesender.utils.run_server_script_for_doc_event",
+        "after_delete": "onesender.utils.run_server_script_for_doc_event",
+        "before_update_after_submit": "onesender.utils.run_server_script_for_doc_event",
+        "on_update_after_submit": "onesender.utils.run_server_script_for_doc_event"
     }
 }
 
@@ -161,27 +161,27 @@ doc_events = {
 scheduler_events = {
     "cron": {
         "* * * * *": [
-            "frappe_onesender.utils.trigger_onesender_notifications_cron",
+            "onesender.utils.trigger_onesender_notifications_cron",
         ]
     }
 }
 # Testing
 # -------
 
-# before_tests = "frappe_onesender.install.before_tests"
+# before_tests = "onesender.install.before_tests"
 
 # Overriding Methods
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "frappe_onesender.event.get_events"
+# 	"frappe.desk.doctype.event.event.get_events": "onesender.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-# 	"Task": "frappe_onesender.task.get_dashboard_data"
+# 	"Task": "onesender.task.get_dashboard_data"
 # }
 
 # exempt linked doctypes from being automatically cancelled
@@ -195,13 +195,13 @@ scheduler_events = {
 
 # Request Events
 # ----------------
-# before_request = ["frappe_onesender.utils.before_request"]
-# after_request = ["frappe_onesender.utils.after_request"]
+# before_request = ["onesender.utils.before_request"]
+# after_request = ["onesender.utils.after_request"]
 
 # Job Events
 # ----------
-# before_job = ["frappe_onesender.utils.before_job"]
-# after_job = ["frappe_onesender.utils.after_job"]
+# before_job = ["onesender.utils.before_job"]
+# after_job = ["onesender.utils.after_job"]
 
 # User Data Protection
 # --------------------
@@ -231,7 +231,7 @@ scheduler_events = {
 # --------------------------------
 
 # auth_hooks = [
-# 	"frappe_onesender.auth.validate"
+# 	"onesender.auth.validate"
 # ]
 
 # Automatically update python controller files with type annotations for this app.

@@ -23,7 +23,7 @@ frappe.ui.form.on("OneSender Message", {
 	refresh(frm) {
 		frm.add_custom_button(__("Kirim Ulang"), () => {
 			frappe.call({
-				method: "frappe_onesender.frappe_onesender.doctype.onesender_message.onesender_message.resend_message",
+				method: "onesender.onesender.doctype.onesender_message.onesender_message.resend_message",
 				args: {
 					docname: frm.doc.name
 				},

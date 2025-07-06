@@ -51,7 +51,7 @@
 // 		// body...
 // 		frm.add_custom_button(__('Get Alerts for Today'), function () {
 //             frappe.call({
-//                 method: 'frappe_onesender.frappe_onesender.doctype.onesender_notification.onesender_notification.call_trigger_notifications',
+//                 method: 'onesender.onesender.doctype.onesender_notification.onesender_notification.call_trigger_notifications',
 //                 args: {
 //                     method: 'daily' 
 //                 },
