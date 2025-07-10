@@ -6,14 +6,14 @@ import json
 from frappe.model.document import Document
 from frappe.desk.form.utils import get_pdf_link
 from frappe.integrations.utils import make_post_request
-from frappe_onesender.utils import get_pdf_link_as_image
-class OneSenderMessage(Document):
-    """Send OneSender messages."""
+from onesender.utils import get_pdf_link_as_image
+class OnesenderMessage(Document):
+    """Send Onesender messages."""
     def validate(self):
         """validate attach"""
-        if self.attach_with_doctype == 1 and self.content_type not in ["image", "document"]:
-            self.content_type = "document"
-        if self.content_type == "image" or self.content_type == "document":
+        if self.attach_with_doctype == 1 and self.content_type not in ["Image", "Document"]:
+            self.content_type = "Document"
+        if self.content_type == "Image" or self.content_type == "Document":
             throwMsg = f"Message Type: {str(self.content_type)},"
             if self.attach_with_doctype == 1 and (self.attach_doctype is None or self.attach_docname is None):
                 frappe.throw(f"{throwMsg} Attach with DocType, Please Set DocType and DocName")
@@ -36,7 +36,7 @@ class OneSenderMessage(Document):
             }
         }
         data_attach = None
-        if self.content_type == "image" or self.content_type == "document":
+        if self.content_type == "Image" or self.content_type == "Document":
             data_attach = {
                 "to": self.format_number(self.to),
             }
@@ -69,13 +69,13 @@ class OneSenderMessage(Document):
                     )
                     print_format = default_print_format if default_print_format else print_format
                 attach_link = ""
-                if self.content_type == "document":
+                if self.content_type == "Document":
                     attach_link = get_pdf_link(
                         doctype.name,
                         doc.name,
                         print_format=print_format,
                     )
-                elif self.content_type == "image":
+                elif self.content_type == "Image":
                     attach_link = get_pdf_link_as_image(
                         doctype.name,
                         doc.name,
@@ -84,8 +84,8 @@ class OneSenderMessage(Document):
                 link += f"{attach_link}&key={key}"
                 filename = self.attach_document_name or doc.name
                 caption = filename
-            data_attach["type"] = self.content_type
-            data_attach[self.content_type] = {
+            data_attach["type"] = self.content_type.lower()
+            data_attach[self.content_type.lower()] = {
                 "link": link,
                 "filename": filename,
                 "caption": caption
@@ -107,7 +107,7 @@ class OneSenderMessage(Document):
             self.save()
     def notify(self, data):
         """Notify."""
-        dt = "OneSender App"
+        dt = "Onesender App"
         os_app = None
         if self.os_app is None:
             os_app = frappe.get_all(dt, filters={"is_default": 1}, fields="*", limit=1)
@@ -145,13 +145,13 @@ class OneSenderMessage(Document):
         from frappe.query_builder import Interval
         from frappe.query_builder.functions import Now
 
-        table = frappe.qb.DocType("OneSender Message")
+        table = frappe.qb.DocType("Onesender Message")
         frappe.db.delete(table, filters=(table.modified < (Now() - Interval(days=days)) and table.status == "Complete"))
 
 @frappe.whitelist()
 def resend_message(docname = ""):
     try:
-        frappe.get_doc("OneSender Message", docname).send_message()
+        frappe.get_doc("Onesender Message", docname).send_message()
         return {
             "message": "Successfully resend message"
         }

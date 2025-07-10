@@ -34,19 +34,19 @@ def run_server_script_for_doc_event(doc, event):
         # run all scripts for this doctype + event
         for notification_name in notification:
             frappe.get_doc(
-                "OneSender Notification",
+                "Onesender Notification",
                 notification_name
             ).notify_event(doc)
 
 
 def get_notifications_map():
     """Get mapping."""
-    if frappe.flags.in_patch and not frappe.db.table_exists("OneSender Notification"):
+    if frappe.flags.in_patch and not frappe.db.table_exists("Onesender Notification"):
         return {}
 
     notification_map = {}
     enabled_onesender_notifications = frappe.get_all(
-        "OneSender Notification",
+        "Onesender Notification",
         fields=("name", "reference_doctype", "doctype_event", "notification_type"),
         filters={"disabled": 0},
     )
@@ -107,12 +107,12 @@ def get_cron_expression_from_notification(doc):
 def trigger_onesender_notifications_cron(run_now=False):
     now = datetime.now()
 
-    notification_list = frappe.get_all("OneSender Notification",
+    notification_list = frappe.get_all("Onesender Notification",
         filters={"disabled": 0, "notification_type": "Scheduler Event"},
         fields=["name", "event_frequency", "cron_expression", "last_run_at"])
 
     for job in notification_list:
-        doc = frappe.get_doc("OneSender Notification", job.name)
+        doc = frappe.get_doc("Onesender Notification", job.name)
         cron_expr = get_cron_expression_from_notification(doc)
         print(cron_expr)
         if not cron_expr:

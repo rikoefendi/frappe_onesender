@@ -6,10 +6,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "device",
-  "url",
+  "section_break_cegk",
   "secret",
-  "is_default"
+  "phone",
+  "status",
+  "is_default",
+  "column_break_jmyn",
+  "device",
+  "url"
  ],
  "fields": [
   {
@@ -26,23 +30,52 @@
    "reqd": 1
   },
   {
-   "default": "0",
-   "fieldname": "is_default",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Default"
-  },
-  {
    "fieldname": "device",
    "fieldtype": "Data",
-   "label": "Phone Number",
+   "label": "Device Name",
+   "reqd": 1,
    "unique": 1
+  },
+  {
+   "default": "0",
+   "description": "Use as default device is no sender device is set or sending message failed (Unauthenticated). Only one default device is allowed.",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Default",
+   "read_only": 1
+  },
+  {
+   "default": "Offline",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Online\nOffline"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Phone",
+   "in_list_view": 1,
+   "label": "Phone Number",
+   "read_only": 1
+  },
+  {
+   "description": "if set as default device is no sender device is set or sending message failed (Unauthenticated). Only one default device is allowed.",
+   "fieldname": "section_break_cegk",
+   "fieldtype": "Section Break",
+   "label": "Device connection"
+  },
+  {
+   "fieldname": "column_break_jmyn",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-06 18:18:27.709856",
+ "modified": "2025-07-08 00:53:20.083982",
  "modified_by": "Administrator",
  "module": "Onesender",
  "name": "Onesender Device",
@@ -65,5 +98,6 @@
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "device"
 }

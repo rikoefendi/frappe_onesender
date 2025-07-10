@@ -3,7 +3,7 @@ name = "onesender"
 authors = [
     { name = "MKB", email = "web.madinakebab@gmail.com"}
 ]
-description = "Frappe integration OneSender(Wa Api Gateway)"
+description = "Frappe integration Onesender(Wa Api Gateway)"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

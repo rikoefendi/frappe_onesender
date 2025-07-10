@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils.safe_exec import get_safe_globals, safe_exec
 from frappe.utils.jinja import render_template
-class OneSenderNotification(Document):
+class OnesenderNotification(Document):
     """Notification."""
 
     def validate(self):
@@ -54,7 +54,7 @@ class OneSenderNotification(Document):
             if self.attach_document_print_as_image == 1:
                 content_type = "image"
         frappe.get_doc({
-            "doctype": "OneSender Message",
+            "doctype": "Onesender Message",
             "to": self.format_number(phone_number),
             "os_app": self.os_app,
             "message": rendered_message,

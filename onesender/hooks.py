@@ -1,7 +1,7 @@
 app_name = "onesender"
 app_title = "Onesender"
 app_publisher = "MKB"
-app_description = "Frappe integration OneSender(Wa Api Gateway)"
+app_description = "Frappe integration Onesender(Wa Api Gateway)"
 app_email = "web.madinakebab@gmail.com"
 app_license = "unlicense"
 
@@ -15,7 +15,7 @@ app_license = "unlicense"
 # 	{
 # 		"name": "onesender",
 # 		"logo": "/assets/onesender/logo.png",
-# 		"title": "Frappe OneSender",
+# 		"title": "Frappe Onesender",
 # 		"route": "/frappe_os"
 # 	}
 # ]
@@ -25,7 +25,7 @@ app_license = "unlicense"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/onesender/css/onesender.css"
-app_include_js = ["/assets/onesender/js/attach.js"]
+app_include_js = ["/assets/onesender/js/attach.js", "/assets/onesender/js/list_view.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/onesender/css/onesender.css"

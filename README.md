@@ -1,6 +1,6 @@
 ### Frappe Onesender
 
-Frappe integration OneSender(Wa Api Gateway)
+Frappe integration Onesender(Wa Api Gateway)
 
 ### Installation
 

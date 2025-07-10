@@ -1,4 +1,8 @@
-frappe.ui.form.on("OneSender Message", {
+frappe.ui.form.on("Onesender Message", {
+	onload(frm){
+		console.log(frm);
+		
+	},
 	before_save(frm) {
 		if (frm.doc.__unsaved && frm.doc.attach) {
 			return false; // Prevent auto-save
@@ -6,10 +10,9 @@ frappe.ui.form.on("OneSender Message", {
 	},
 	attach_with_doctype(frm) {
 		if (!frm.doc.attach_with_doctype) {
-			frm.set_value("attach_docname", "");
-			frm.set_value("attach_doctype", "");
+			delete frm.doc.attach_docname;
+			delete frm.doc.attach_doctype;
 		}
-		console.log(frm.doc);
 	},
 	attach_doctype(frm) {
 		// Reset target_docname dan set Link options sesuai target_doctype

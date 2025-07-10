@@ -7,58 +7,65 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "setup_section",
+  "disabled",
   "notification_name",
+  "condition",
+  "column_break_3",
   "notification_type",
+  "doctype_event",
   "reference_doctype",
-  "field_name",
+  "reference_date",
+  "days_in",
   "event_frequency",
   "cron_expression",
   "run_at_datetime",
   "interval_every",
   "interval_unit",
-  "run_time",
   "weekday_days",
   "monthday_days",
-  "doctype_event",
-  "column_break_3",
-  "os_app",
-  "disabled",
-  "attach_document_print",
-  "attach_document_print_as_image",
-  "attach_document_name",
-  "condition",
+  "run_time",
   "section_break_giqn",
   "last_run_at",
   "column_break_vkub",
   "next_run_at",
   "section_break_11",
+  "device",
   "message",
-  "message_examples"
+  "message_examples",
+  "column_break_njxs",
+  "attach_document_print",
+  "attach_document_print_as_image",
+  "caption",
+  "attach_document_name",
+  "recipients_list_section",
+  "receipt"
  ],
  "fields": [
   {
+   "description": "If left blank, just send a text message without a DocType attachment.",
    "fieldname": "reference_doctype",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Reference Document Type",
-   "options": "DocType",
-   "reqd": 1
+   "label": "Choose DocType",
+   "options": "DocType"
   },
   {
    "depends_on": "eval:doc.notification_type == \"Scheduler Event\"",
    "fieldname": "event_frequency",
    "fieldtype": "Select",
-   "label": "Event Frequency",
+   "label": "How often you want to run your event notification?",
    "mandatory_depends_on": "eval:doc.notification_type == \"Scheduler Event\"",
-   "options": "Cron\nAt Regular Intervals\nOnce\nEvery Day\nDays Of The Week\nDates Of The Month"
+   "options": "Cron\nAt regular intervals\nOnce\nEvery day\nDays of the week\nDates of the month"
   },
   {
    "depends_on": "eval:doc.notification_type==='DocType Event'",
    "fieldname": "doctype_event",
    "fieldtype": "Select",
-   "label": "DocType Event",
-   "options": "Before Insert\nBefore Validate\nBefore Save\nAfter Insert\nAfter Save\nBefore Submit\nAfter Submit\nBefore Cancel\nAfter Cancel\nBefore Delete\nAfter Delete\nBefore Save (Submitted Document)\nAfter Save (Submitted Document)"
+   "label": "Send Alert On",
+   "mandatory_depends_on": "eval:doc.notification_type==='DocType Event'",
+   "options": "Before Insert\nBefore Validate\nBefore Save\nAfter Insert\nAfter Save\nBefore Submit\nAfter Submit\nBefore Cancel\nAfter Cancel\nBefore Delete\nAfter Delete\nBefore Save (Submitted Document)\nAfter Save (Submitted Document)\nDays After\nDays Before"
   },
   {
    "depends_on": "eval:doc.event_frequency == 'Once'",
@@ -70,44 +77,45 @@
   },
   {
    "default": "1",
-   "depends_on": "eval:doc.event_frequency == 'At Regular Intervals'",
+   "depends_on": "eval:doc.event_frequency == 'At regular intervals'",
    "description": "Run every X unit(s)",
    "fieldname": "interval_every",
    "fieldtype": "Int",
    "label": "Every",
-   "mandatory_depends_on": "eval:doc.event_frequency == 'At Regular Intervals'"
+   "mandatory_depends_on": "eval:doc.event_frequency == 'At regular intervals'"
   },
   {
    "default": "Minutes",
-   "depends_on": "eval:doc.event_frequency == 'At Regular Intervals'",
+   "depends_on": "eval:doc.event_frequency == 'At regular intervals'",
    "fieldname": "interval_unit",
    "fieldtype": "Select",
    "label": "Interval Unit",
-   "mandatory_depends_on": "eval:doc.event_frequency == 'At Regular Intervals'",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'At regular intervals'",
    "options": "Minutes\nHours\nDays\nWeeks"
   },
   {
-   "depends_on": "eval:['Every Day', 'Days Of The Week', 'Dates Of The Month'].includes(doc.event_frequency) || (doc.event_frequency == 'At Regular Intervals' && ['Days', 'Weeks'].includes(doc.interval_unit))",
+   "depends_on": "eval:['Every day', 'Days of the week', 'Dates of the month'].includes(doc.event_frequency) || (doc.event_frequency == 'At regular intervals' && ['Days', 'Weeks'].includes(doc.interval_unit))",
    "fieldname": "run_time",
    "fieldtype": "Time",
-   "label": "Run Time",
-   "mandatory_depends_on": "eval:['Every Day', 'Days Of The Week', 'Dates Of The Month'].includes(doc.event_frequency) || (doc.event_frequency == 'At Regular Intervals' && ['Days', 'Weeks'].includes(doc.interval_unit))"
+   "label": "Time",
+   "mandatory_depends_on": "eval:['Every day', 'Days of the week', 'Dates of the month'].includes(doc.event_frequency) || (doc.event_frequency == 'At regular intervals' && ['Days', 'Weeks'].includes(doc.interval_unit))"
   },
   {
-   "depends_on": "eval:doc.event_frequency == 'Days Of The Week'",
-   "description": "Days to run on",
+   "depends_on": "eval:doc.event_frequency == 'Days of the week'",
+   "description": "Enter day numbers (Sunday = 0 to Saturday = 6), separated by commas.\nExample: 1,3,5 (Monday, Wednesday, Friday)",
+   "documentation_url": "https://crontab.cronhub.io/",
    "fieldname": "weekday_days",
    "fieldtype": "Data",
-   "label": "Days of the Week",
-   "mandatory_depends_on": "eval:doc.event_frequency == 'Days Of The Week'"
+   "label": "Days of the week",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'Days of the week'"
   },
   {
-   "depends_on": "eval:doc.event_frequency == 'Dates Of The Month'",
-   "description": "Days in month to run",
+   "depends_on": "eval:doc.event_frequency == 'Dates of the month'",
+   "description": "Enter date numbers (1\u201331), separated by commas.\nExample: 1,15,30 (1st, 15th, 30th day of the month)",
    "fieldname": "monthday_days",
    "fieldtype": "Data",
-   "label": "Days of the Month",
-   "mandatory_depends_on": "eval:doc.event_frequency == 'Dates Of The Month'"
+   "label": "Dates of the month",
+   "mandatory_depends_on": "eval:doc.event_frequency == 'Dates of the month'"
   },
   {
    "fieldname": "column_break_3",
@@ -115,6 +123,7 @@
   },
   {
    "default": "0",
+   "description": "If checked, notification will pause until unchecked.",
    "fieldname": "disabled",
    "fieldtype": "Check",
    "label": "Disabled"
@@ -135,19 +144,13 @@
    "label": "Condition"
   },
   {
-   "description": "Mobile number field",
-   "fieldname": "field_name",
-   "fieldtype": "Data",
-   "label": "Field Name",
-   "mandatory_depends_on": "eval:['DocType Event'].includes(doc.notification_type)"
-  },
-  {
    "fieldname": "section_break_11",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Message"
   },
   {
    "default": "0",
-   "description": "Attach Printed Document",
+   "description": "Attach Printed Document from DocType.",
    "fieldname": "attach_document_print",
    "fieldtype": "Check",
    "label": " Attach Document Print"
@@ -162,25 +165,21 @@
    "unique": 1
   },
   {
+   "description": "Use Jinja to access fields with {{ doc.fieldname }} and add logic with {% if %}, {% for %}, etc.\n\n",
    "fieldname": "message",
    "fieldtype": "Text",
-   "label": "Message"
+   "label": "Message",
+   "reqd": 1
   },
   {
    "fieldname": "message_examples",
    "fieldtype": "HTML",
    "label": "Message Examples",
-   "options": "<h5>Message Example</h5>\n\n<pre>&lt;h3&gt;Order Overdue&lt;/h3&gt;\n\n&lt;p&gt;Transaction {{ doc.name }} has exceeded Due Date. Please take necessary action.&lt;/p&gt;\n\n&lt;!-- show last comment --&gt;\n{% if comments %}\nLast comment: {{ comments[-1].comment }} by {{ comments[-1].by }}\n{% endif %}\n\n&lt;h4&gt;Details&lt;/h4&gt;\n\n&lt;ul&gt;\n&lt;li&gt;Customer: {{ doc.customer }}\n&lt;li&gt;Amount: {{ doc.grand_total }}\n&lt;/ul&gt;\n</pre>"
-  },
-  {
-   "fieldname": "os_app",
-   "fieldtype": "Link",
-   "label": "OneSender",
-   "options": "Onesender Device",
-   "reqd": 1
+   "options": "Hello {{ doc.customer_name }},\n\nYour order {{ doc.name }} is overdue.\n\n{% if doc.due_date %}\nDue Date: {{ doc.due_date }}\n{% endif %}\n\n{% for item in doc.items %}\n- {{ item.item_name }}: {{ item.qty }}\n{% endfor %}\n"
   },
   {
    "depends_on": "eval:(doc.notification_type == \"Scheduler Event\" && doc.event_frequency == \"Cron\")",
+   "documentation_url": "https://crontab.cronhub.io/",
    "fieldname": "cron_expression",
    "fieldtype": "Data",
    "label": "Cron Expression",
@@ -210,30 +209,84 @@
   {
    "default": "0",
    "depends_on": "eval:(doc.attach_document_print == 1)",
-   "description": "Attach Doument Print as Image",
+   "description": "Attach Printed Document as Image.",
    "fieldname": "attach_document_print_as_image",
    "fieldtype": "Check",
    "label": " Attach as Image"
   },
   {
    "depends_on": "eval:(doc.attach_document_print == 1)",
+   "description": "Use Jinja to access fields with {{ doc.fieldname }}",
    "fieldname": "attach_document_name",
    "fieldtype": "Data",
-   "label": "File Name",
-   "mandatory_depends_on": "eval:(doc.attach_document_print == 1)"
+   "label": "Document Naming (optional)",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "device",
+   "fieldtype": "Link",
+   "label": "Onesender Device",
+   "options": "Onesender Device",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:(doc.attach_document_print == 1)",
+   "description": "Use Jinja to access fields with {{ doc.fieldname }}",
+   "fieldname": "caption",
+   "fieldtype": "Data",
+   "label": "Caption",
+   "mandatory_depends_on": "eval:(doc.attach_document_print == 1)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "receipt",
+   "fieldtype": "Table",
+   "label": "Recipients",
+   "options": "Onesender Receipt",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.reference_doctype && (doc.doctype_event == \"Days After\" || doc.doctype_event == \"Days Before\")",
+   "description": "Send alert if date matches this field's value\n\n",
+   "fieldname": "reference_date",
+   "fieldtype": "Select",
+   "label": "Reference Date",
+   "mandatory_depends_on": "eval:doc.reference_doctype && (doc.doctype_event == \"Days After\" || doc.doctype_event == \"Days Before\")"
+  },
+  {
+   "depends_on": "eval:doc.reference_doctype && (doc.doctype_event == \"Days After\" || doc.doctype_event == \"Days Before\")",
+   "description": "Send days before or after the reference date.",
+   "fieldname": "days_in",
+   "fieldtype": "Int",
+   "label": "Days Before or After",
+   "mandatory_depends_on": "eval:doc.reference_doctype && (doc.doctype_event == \"Days After\" || doc.doctype_event == \"Days Before\")"
+  },
+  {
+   "fieldname": "setup_section",
+   "fieldtype": "Section Break",
+   "label": "Setup"
+  },
+  {
+   "fieldname": "column_break_njxs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recipients_list_section",
+   "fieldtype": "Section Break",
+   "label": "Recipients List"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [
   {
-   "link_doctype": "OneSender Message",
+   "link_doctype": "Onesender Message",
    "link_fieldname": "onesender_notification"
   }
  ],
- "modified": "2025-07-06 18:17:05.603658",
+ "modified": "2025-07-10 13:42:02.303783",
  "modified_by": "Administrator",
  "module": "Onesender",
- "name": "OneSender Notification",
+ "name": "Onesender Notification",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

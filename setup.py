@@ -9,7 +9,7 @@ from onesender import __version__ as version
 setup(
     name="onesender",
     version=version,
-    description="OneSender integration for frappe",
+    description="Onesender integration for frappe",
     author="Madina Kebab",
     author_email="web.madinakebab@gmail.com",
     packages=find_packages(),

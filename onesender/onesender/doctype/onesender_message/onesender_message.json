@@ -6,11 +6,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "os_app",
+  "device",
   "to",
   "content_type",
-  "attach_with_doctype",
+  "caption",
   "attach_document_name",
+  "attach_with_doctype",
   "attach",
   "attach_doctype",
   "attach_docname",
@@ -25,11 +26,11 @@
  "fields": [
   {
    "allow_in_quick_entry": 1,
-   "description": "Mobile number with country code",
+   "description": "Mobile number with country code, example: 6289123456789. If more than 1 recipient or group, distinguish with the comma separator \",\". Example: 6289508618321, 120363418637029160@g.us",
    "fieldname": "to",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "TO ",
+   "label": "Send To",
    "reqd": 1
   },
   {
@@ -48,8 +49,8 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Type",
-   "options": "text\ndocument\nimage",
+   "label": "Message Type",
+   "options": "Text\nDocument\nImage",
    "reqd": 1
   },
   {
@@ -57,29 +58,22 @@
    "depends_on": "eval:((doc.content_type =='document' || doc.content_type =='image') && (doc.attach_with_doctype === 0))",
    "fieldname": "attach",
    "fieldtype": "Attach",
-   "label": "Attach"
-  },
-  {
-   "fieldname": "os_app",
-   "fieldtype": "Link",
-   "label": "OneSender",
-   "options": "Onesender Device",
-   "reqd": 1
+   "label": "Attachment"
   },
   {
    "depends_on": "eval:(doc.attach_with_doctype === 1)",
    "fieldname": "attach_doctype",
    "fieldtype": "Link",
-   "label": "Doctype",
+   "label": "Choose DocType",
    "mandatory_depends_on": "eval:(doc.attach_with_doctype == 1)",
    "options": "DocType"
   },
   {
-   "depends_on": "eval:(doc.attach_doctype != \"\")",
+   "depends_on": "eval:(doc.attach_with_doctype == 1)",
    "fieldname": "attach_docname",
    "fieldtype": "Link",
-   "label": "Docname",
-   "mandatory_depends_on": "eval:(doc.attach_doctype != \"\")",
+   "label": "Choose DocName",
+   "mandatory_depends_on": "eval:(doc.attach_with_doctype == 1)",
    "options": "User"
   },
   {
@@ -88,7 +82,7 @@
    "hidden": 1,
    "in_list_view": 1,
    "label": "Notification",
-   "options": "OneSender Notification"
+   "options": "Onesender Notification"
   },
   {
    "fieldname": "status",
@@ -96,14 +90,14 @@
    "hidden": 1,
    "in_list_view": 1,
    "label": "Status",
-   "options": "Complete\nFailed"
+   "options": "Complete\nFailed\nScheduled"
   },
   {
    "default": "0",
-   "depends_on": "eval:(doc.content_type =='document' || doc.content_type =='image')",
+   "depends_on": "eval:(doc.content_type =='Document' || doc.content_type =='Image')",
    "fieldname": "attach_with_doctype",
    "fieldtype": "Check",
-   "label": "Attach With Doctype"
+   "label": "Attach with DocType"
   },
   {
    "fieldname": "section_break_odey",
@@ -122,17 +116,33 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:(doc.content_type == \"Document\")",
    "fieldname": "attach_document_name",
    "fieldtype": "Data",
-   "label": "Document Name"
+   "label": "Document Naming (optional)"
+  },
+  {
+   "fieldname": "device",
+   "fieldtype": "Link",
+   "label": "Onesender Device",
+   "options": "Onesender Device",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:(doc.content_type =='Document' || doc.content_type =='Image')",
+   "description": "Attachment caption",
+   "fieldname": "caption",
+   "fieldtype": "Data",
+   "label": "Caption",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-06 18:17:05.407367",
+ "modified": "2025-07-10 12:34:08.689895",
  "modified_by": "Administrator",
  "module": "Onesender",
- "name": "OneSender Message",
+ "name": "Onesender Message",
  "owner": "Administrator",
  "permissions": [
   {
