@@ -1,16 +1,16 @@
 frappe.listview_settings["Onesender Device"] = {
-	add_fields: ["test", "is_default"],
+	add_fields: ["is_online", "is_default"],
 	get_indicator(doc) {
-		statusText = doc.status;
+		statusText = doc.is_online ? "Online" : "offline";
 		statusText += doc.is_default ? " • Default" : "";
-		if (doc.status == "Online") return [__(statusText), "green"];
-		if (doc.status == "Offline") return [__(statusText), "red"];
+		if (doc.is_online) return [__(statusText), "green"];
+		if (!doc.is_online) return [__(statusText), "red"];
 	},
 	hide_name_column: true,
 	disable_comment_count: true,
 	button: [
 		{
-			name: 'onesender.device.default',
+			name: "onesender.api.device_set_default",
 			show(doc) {
 				return !doc.is_default;
 			},
@@ -21,13 +21,25 @@ frappe.listview_settings["Onesender Device"] = {
 				return `Test connection Onesender ${__(doc.name)}`;
 			},
 			action(doc) {
-				return frappe.call("onesender.api.device.set_default", {
-					name: doc.name,
+				return frappe.call({
+					method: "onesender.api.device_set_default",
+					args: {
+						name: doc.name,
+					},
+					freeze: true,
+					callback(r) {
+						console.log(frappe);
+						
+						if (r.message) {
+							frappe.msgprint(r.message);
+						}
+						cur_list.refresh()
+					},
 				});
 			},
 		},
 		{
-			name: 'onesender.device.test',
+			name: "onesender.api.device_check",
 			show(doc) {
 				return true;
 			},
@@ -38,8 +50,18 @@ frappe.listview_settings["Onesender Device"] = {
 				return `Test connection Onesender ${__(doc.name)}`;
 			},
 			action(doc) {
-				return frappe.call("onesender.api.device.test_connection", {
-					name: doc.name,
+				return frappe.call({
+					method: "onesender.api.device_check",
+					args: {
+						name: doc.name,
+					},
+					freeze: true,
+					callback(r) {
+						if (r.message) {
+							frappe.msgprint(r.message);
+						}
+						cur_list.refresh()
+					},
 				});
 			},
 		},

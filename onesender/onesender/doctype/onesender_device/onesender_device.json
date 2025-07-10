@@ -9,11 +9,13 @@
   "section_break_cegk",
   "secret",
   "phone",
-  "status",
   "is_default",
+  "is_online",
   "column_break_jmyn",
   "device",
-  "url"
+  "url",
+  "section_break_chct",
+  "error_res"
  ],
  "fields": [
   {
@@ -46,17 +48,8 @@
    "read_only": 1
   },
   {
-   "default": "Offline",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Online\nOffline"
-  },
-  {
    "fieldname": "phone",
-   "fieldtype": "Phone",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Phone Number",
    "read_only": 1
@@ -70,12 +63,29 @@
   {
    "fieldname": "column_break_jmyn",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_chct",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "error_res",
+   "fieldtype": "HTML",
+   "label": "Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_online",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Online",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-08 00:53:20.083982",
+ "modified": "2025-07-10 14:43:49.193495",
  "modified_by": "Administrator",
  "module": "Onesender",
  "name": "Onesender Device",

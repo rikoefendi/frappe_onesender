@@ -13,6 +13,12 @@ from werkzeug.wrappers import Response
 from datetime import datetime, timedelta, time
 from croniter import croniter
 from frappe.utils import now_datetime, get_datetime, get_time
+
+def build_header(secret: str):
+    return {
+        "authorization": f"Bearer {secret}"
+    }
+
 def run_server_script_for_doc_event(doc, event):
     """Run on each event."""
     if event not in EVENT_MAP:
@@ -61,6 +67,12 @@ def get_notifications_map():
     frappe.cache().set_value("onesender_notification_map", notification_map)
 
     return notification_map
+
+def trigger_device_connection_check():
+    devices = frappe.get_all("Onesender Device")
+    for device in devices:
+        frappe.get_doc("Onesender Device", device.name).check()
+
 
 from croniter import croniter
 from datetime import datetime, time

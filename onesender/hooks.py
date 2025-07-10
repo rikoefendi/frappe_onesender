@@ -162,6 +162,9 @@ scheduler_events = {
     "cron": {
         "* * * * *": [
             "onesender.utils.trigger_onesender_notifications_cron",
+        ],
+        "*/5 * * * *":[
+            "onesender.utils.trigger_device_connection_check"
         ]
     }
 }
