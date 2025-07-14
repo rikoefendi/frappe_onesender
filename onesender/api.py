@@ -1,6 +1,8 @@
 # myapp/api.py
 import json
 import frappe
+import onesender
+import onesender.utils
 @frappe.whitelist()
 def device_check(name: str):
     doc = frappe.get_doc("Onesender Device", name)
@@ -16,3 +18,7 @@ def device_set_default(name: str):
     doc.is_default = 1
     doc.save()
     return f"Succes set as default Device: {name}"
+
+@frappe.whitelist()
+def test_notification(name: str):
+    onesender.utils.run_notification(name, True)

@@ -36,7 +36,7 @@ def run_server_script_for_doc_event(doc, event):
             frappe.get_doc(
                 "Onesender Notification",
                 notification_name
-            ).notify_event(doc)
+            ).trigger_notify_event(doc)
 
 
 def get_notifications_map():
@@ -77,61 +77,68 @@ def get_cron_expression_from_notification(doc):
     minute = run_time.minute
     hour = run_time.hour
 
-    freq = doc.event_frequency
+    freq = doc.event_frequency.lower()
     unit = doc.interval_unit or ""
+    unit = unit.lower()
     every = doc.interval_every or 1
 
-    if freq == "Cron" and doc.cron_expression:
+    if freq == "cron" and doc.cron_expression:
         return doc.cron_expression.strip()
 
-    if freq == "Once":
+    if freq == "once":
         return None
-
-    if freq == "At Regular Intervals":
-        if unit == "Minutes":
+    if freq == "at regular intervals":
+        # print(freq, every, unit)
+        if unit == "minutes":
             return f"*/{every} * * * *"
-        elif unit == "Hours":
+        elif unit == "hours":
             return f"{minute} */{every} * * *"
-        elif unit == "Days":
+        elif unit == "days":
             return f"{minute} {hour} */{every} * *"
-        elif unit == "Weeks":
+        elif unit == "weeks":
             return f"{minute} {hour} * * */{every}"
 
-    if freq == "Every Day":
+    if freq == "every day":
         return f"{minute} {hour} * * *"
 
-    if freq == "Days Of The Week" and doc.weekday_days:
+    if freq == "days of the week" and doc.weekday_days:
         days = ",".join(d.strip() for d in doc.weekday_days.split(",") if d.strip().isdigit())
         return f"{minute} {hour} * * {days}"
 
-    if freq == "Dates Of The Month" and doc.monthday_days:
+    if freq == "dates of the month" and doc.monthday_days:
         days = ",".join(d.strip() for d in doc.monthday_days.split(",") if d.strip().isdigit())
         return f"{minute} {hour} {days} * *"
 
     return None
 
-def trigger_onesender_notifications_cron(run_now=False):
+def run_notification(name, run_now = False):
     now = datetime.now()
+    doc = frappe.get_doc("Onesender Notification", name)
+    cron_expr = get_cron_expression_from_notification(doc)
+    if not cron_expr:
+        return
 
+    last_run = doc.last_run_at or now.replace(year=now.year - 1)
+    cron = croniter(cron_expr, last_run)
+    next_time = cron.get_next(datetime)
+    if next_time <= now or run_now:
+        doc.db_set("last_run_at", now)
+        doc.db_set("next_run_at", next_time)
+        doc.trigger_notify_scheduler()
+
+def trigger_onesender_notifications_cron():
+    
     notification_list = frappe.get_all("Onesender Notification",
-        filters={"disabled": 0, "notification_type": "Scheduler Event"},
-        fields=["name", "event_frequency", "cron_expression", "last_run_at"])
+        filters={"disabled": 0, "notification_type": "Scheduler Event"},)
+    
+    for nl in notification_list:
+        try:
+            run_notification(nl.name)
+        except Exception as e:
+            frappe.log_error("Onesender Notification Cron", f"Error in notification {nl.name}: {e}", )
+            continue  # safely continue even if one fails
 
-    for job in notification_list:
-        doc = frappe.get_doc("Onesender Notification", job.name)
-        cron_expr = get_cron_expression_from_notification(doc)
-        print(cron_expr)
-        if not cron_expr:
-            continue
 
-        last_run = doc.last_run_at or now.replace(year=now.year - 1)
-        cron = croniter(cron_expr, last_run)
-        next_time = cron.get_next(datetime)
-
-        if next_time <= now or run_now:
-            doc.db_set("last_run_at", now)
-            doc.db_set("next_run_at", next_time)
-            doc.notify_scheduled()
 def get_attach_doctype_link(doctype, docname, print_format="", no_letterhead=0, filename = None, attach_type: Literal["pdf", "image"] = "pdf"):
     return frappe.utils.quote_urls(f"/api/method/onesender.attach_doctype.download_{attach_type}?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}&filename={filename or ""}")
 
