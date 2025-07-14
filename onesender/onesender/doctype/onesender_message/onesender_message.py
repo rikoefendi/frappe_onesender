@@ -4,9 +4,10 @@ import frappe.utils
 import frappe
 import json
 from frappe.model.document import Document
-from frappe.desk.form.utils import get_pdf_link
 from frappe.integrations.utils import make_post_request
-from onesender.utils import get_pdf_link_as_image
+from onesender.utils import get_attach_doctype_link
+from frappe.utils import get_request_session
+
 class OnesenderMessage(Document):
     """Send Onesender messages."""
     def validate(self):
@@ -40,61 +41,42 @@ class OnesenderMessage(Document):
             data_attach = {
                 "to": self.format_number(self.to),
             }
-            link = frappe.utils.get_url()
             # generate attach link
             filename = self.name
-            caption = filename
-            if self.attach is not None:
-                link += self.attach
-                filename = self.attach.split("/")[-1]
-                caption = filename
 
             if self.attach_with_doctype:
                 doctype = frappe.get_doc("DocType", self.attach_doctype)
                 doc = frappe.get_doc(self.attach_doctype, self.attach_docname)
                 key = doc.get_document_share_key()  # noqa
                 frappe.db.commit()
-                print_format = "Standard"
-                if doctype.custom:
-                    if doctype.default_print_format:
-                        print_format = doctype.default_print_format
-                else:
-                    default_print_format = frappe.db.get_value(
-                        "Property Setter",
-                        filters={
-                            "doc_type": doctype.name,
-                            "property": "default_print_format"
-                        },
-                        fieldname="value"
-                    )
-                    print_format = default_print_format if default_print_format else print_format
-                attach_link = ""
-                if self.content_type == "Document":
-                    attach_link = get_pdf_link(
+
+
+                attach_type = "pdf"
+                if self.content_type == "Image":
+                    attach_type = "image"
+                
+                attach_link = get_attach_doctype_link(
                         doctype.name,
                         doc.name,
-                        print_format=print_format,
+                        filename=filename,
+                        attach_type=attach_type
                     )
-                elif self.content_type == "Image":
-                    attach_link = get_pdf_link_as_image(
-                        doctype.name,
-                        doc.name,
-                        print_format=print_format,
-                    )
-                link += f"{attach_link}&key={key}"
+                
                 filename = self.attach_document_name or doc.name
-                caption = filename
-            data_attach["type"] = self.content_type.lower()
-            data_attach[self.content_type.lower()] = {
-                "link": link,
-                "filename": filename,
-                "caption": caption
-            }
+                link = frappe.utils.get_url(uri=f"{attach_link}&key={key}", full_address=False)
+                caption = self.caption or filename
+                data_attach["type"] = self.content_type.lower()
+                data_attach[self.content_type.lower()] = {
+                    "link": link,
+                    "filename": filename,
+                    "caption": caption
+                }
         try:
             self.notify(data_text)
             if data_attach is not None:
                 self.notify(data_attach)
-                self.status = "Complete"
+            self.status = "Complete"
+            self.details = ""
         except Exception as e:
             self.details = e
             self.status = "Failed"
@@ -107,25 +89,25 @@ class OnesenderMessage(Document):
             self.save()
     def notify(self, data):
         """Notify."""
-        dt = "Onesender App"
-        os_app = None
-        if self.os_app is None:
-            os_app = frappe.get_all(dt, filters={"is_default": 1}, fields="*", limit=1)
+        dt = "Onesender Device"
+        device = None
+        if self.device is None:
+            device = frappe.get_all(dt, filters={"is_default": 1}, fields="*", limit=1)
         else:
-            os_app = frappe.get_doc(dt, self.os_app)
-        if type(os_app) is list:
-            if len(os_app) > 0:
-                os_app = os_app[0]
+            device = frappe.get_doc(dt, self.device)
+        if type(device) is list:
+            if len(device) > 0:
+                device = device[0]
             else:
-                os_app = None
-        if os_app is None:
+                device = None
+        if device is None:
             frappe.throw(f"Please set {dt}")
-        token = os_app.secret
+        token = device.secret
         headers = {
             "authorization": f"Bearer {token}",
         }
         response = make_post_request(
-            url=f"{os_app.url}/api/v1/messages",
+            url=f"{device.url}/api/v1/messages",
             headers=headers,
             data=json.dumps(data)
         )
