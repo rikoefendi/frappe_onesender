@@ -166,7 +166,10 @@ scheduler_events = {
         "*/5 * * * *":[
             "onesender.utils.trigger_device_connection_check"
         ]
-    }
+    },
+    "daily":[
+        "onesender.utils.trigger_onesender_notification_today"
+    ]
 }
 # Testing
 # -------

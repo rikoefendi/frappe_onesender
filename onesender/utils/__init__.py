@@ -139,6 +139,19 @@ def trigger_onesender_notifications_cron():
             continue  # safely continue even if one fails
 
 
+def trigger_onesender_notification_today():
+    doc_list = frappe.get_all(
+            "Onesender Notification", filters={"doctype_event": ("in", ("Days Before", "Days After")), "disabled": 0}
+        )
+    for d in doc_list:
+        try:
+            alert = frappe.get_doc("Onesender Notification", d.name)
+            alert.get_notifications_today()
+        except Exception as e:
+            frappe.log_error("Onesender Notification Dalily", f"Error in notification {d.name}: {e}", )
+            continue  # safely continue even if one fails
+    return len(doc_list)
+
 def get_attach_doctype_link(doctype, docname, print_format="", no_letterhead=0, filename = None, attach_type: Literal["pdf", "image"] = "pdf"):
     return frappe.utils.quote_urls(f"/api/method/onesender.attach_doctype.download_{attach_type}?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}&filename={filename or ""}")
 

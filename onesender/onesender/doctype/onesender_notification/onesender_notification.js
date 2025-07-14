@@ -52,12 +52,12 @@ frappe.notification = {
 		if (frm.is_new() || !frm.doc.reference_doctype) return;
 		frm.add_custom_button(__("Get Alerts for Today"), () => {
 			frappe.call({
-				method: "onesender.onesender.doctype.onesender_notification.onesender_notification.call_trigger_notifications",
-				args: {
-					method: "daily",
-				},
+				method: "onesender.api.get_alert_today",
 				callback: (response) => {
+					console.log(response.message);
+					
 					if (response.message && response.message.length > 0) {
+						frappe.msgprint(response.message);
 					} else {
 						frappe.msgprint(__("No alerts for today"));
 					}

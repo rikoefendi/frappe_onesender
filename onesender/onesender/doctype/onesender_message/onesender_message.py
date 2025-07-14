@@ -22,7 +22,6 @@ class OnesenderMessage(Document):
                 frappe.throw(f"{throwMsg} Please Attach")
     def after_insert(self):
         """Trigger Send message."""
-        print(vars(self))
         self.send_message()
     def send_message(self):
         self.validate()

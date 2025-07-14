@@ -5,6 +5,8 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils.safe_exec import get_safe_globals, safe_exec
 from frappe.utils.jinja import render_template
+from frappe.utils import add_to_date, nowdate
+
 class OnesenderNotification(Document):
     """Notification."""
 
@@ -105,3 +107,29 @@ class OnesenderNotification(Document):
 
         return number
     
+
+    def get_notifications_today(self):
+        """get list of documents that will be triggered today"""
+        diff_days = self.days_in
+        if self.doctype_event == "Days After":
+            diff_days = -diff_days
+
+        reference_date = add_to_date(nowdate(), days=diff_days)
+        reference_date_start = reference_date + " 00:00:00.000000"
+        reference_date_end = reference_date + " 23:59:59.000000"
+
+        doc_list = frappe.get_all(
+            self.reference_doctype,
+            fields="name",
+            filters=[
+                {self.reference_date: (">=", reference_date_start)},
+                {self.reference_date: ("<=", reference_date_end)},
+            ],
+        )
+        for d in doc_list:
+            doc = frappe.get_doc(self.reference_doctype, d.name)
+            recipients = self.get_phone_from_recipients(doc)
+            phone = ",".join(recipients)
+            self.notify_message(doc, phone_no=phone)
+            # print(doc.name)
+

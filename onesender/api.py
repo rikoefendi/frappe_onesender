@@ -1,5 +1,4 @@
 # myapp/api.py
-import json
 import frappe
 import onesender
 import onesender.utils
@@ -22,3 +21,8 @@ def device_set_default(name: str):
 @frappe.whitelist()
 def test_notification(name: str):
     onesender.utils.run_notification(name, True)
+
+@frappe.whitelist()
+def get_alert_today():
+    total = onesender.utils.trigger_onesender_notification_today()
+    return  f"Succes get alert today, total: {total}"
