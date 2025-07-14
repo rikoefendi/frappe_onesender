@@ -25,7 +25,6 @@ class OnesenderMessage(Document):
         self.send_message()
     def send_message(self):
         self.validate()
-
         # self.bd
         """Build Message"""
         # send text 
@@ -43,7 +42,7 @@ class OnesenderMessage(Document):
             }
             # generate attach link
             filename = self.name
-
+            link = frappe.utils.get_url()
             if self.attach_with_doctype:
                 doctype = frappe.get_doc("DocType", self.attach_doctype)
                 doc = frappe.get_doc(self.attach_doctype, self.attach_docname)
@@ -63,45 +62,54 @@ class OnesenderMessage(Document):
                     )
                 
                 filename = self.attach_document_name or doc.name
-                link = frappe.utils.get_url(uri=f"{attach_link}&key={key}", full_address=False)
-                caption = self.caption or filename
-                data_attach["type"] = self.content_type.lower()
-                data_attach[self.content_type.lower()] = {
-                    "link": link,
-                    "filename": filename,
-                    "caption": caption
-                }
+                link += f"{attach_link}&key={key}"
+                
+            if self.attach and not self.attach_with_doctype:
+                filename = self.attach_document_name or self.attach.split("/")[-1]
+                link += self.attach
+
+            data_attach["type"] = self.content_type.lower()
+            data_attach[self.content_type.lower()] = {
+                "link": link,
+                "filename": filename,
+                "caption": self.caption or filename
+            }
         try:
-            self.notify(data_text)
+            device, online = self.get_device()
+            if device:
+                if not online and not device.is_default:
+                    device, online = self.get_device(True)
+
+            else:
+                device, online = self.get_device(True)
+            if not device or not online:
+                frappe.throw("Device not set or offline", exc=frappe.ValidationError)
+
+            self.notify(device, data_text)
             if data_attach is not None:
-                self.notify(data_attach)
+                self.notify(device, data_attach)
             self.status = "Complete"
             self.details = ""
         except Exception as e:
-            self.details = e
+            self.details = str(e)
             self.status = "Failed"
             self.save()
+            frappe.db.commit()
+            frappe.throw(str(e), title="Send Message Failed", exc=e)
         finally:
+            # print(device.name)
+            sender = ""
+            if device:
+                sender = f"{device.name or ""}-{device.phone or ""}"
             self.data = json.dumps({
                 "text": data_text,
-                "attach": data_attach
+                "attach": data_attach,
+                "sender": sender 
             })
             self.save()
-    def notify(self, data):
+            frappe.db.commit()
+    def notify(self, device, data):
         """Notify."""
-        dt = "Onesender Device"
-        device = None
-        if self.device is None:
-            device = frappe.get_all(dt, filters={"is_default": 1}, fields="*", limit=1)
-        else:
-            device = frappe.get_doc(dt, self.device)
-        if type(device) is list:
-            if len(device) > 0:
-                device = device[0]
-            else:
-                device = None
-        if device is None:
-            frappe.throw(f"Please set {dt}")
         token = device.secret
         headers = {
             "authorization": f"Bearer {token}",
@@ -114,7 +122,22 @@ class OnesenderMessage(Document):
         if response["code"] != 200:
             frappe.throw(msg=json.dumps(response), title="Send Message Onesender Fail")
 
-
+    def get_device(self, default = False):
+        dt = "Onesender Device"
+        device = None
+        if default:
+            device = frappe.get_all(dt, filters={"is_default": 1}, limit=1)
+        else:
+            device = frappe.get_doc(dt, self.device)
+        if type(device) is list:
+            if len(device) > 0:
+                device = frappe.get_doc(dt, device[0].name)
+            else:
+                device = None
+        if not device:
+            return None, False
+        return device, device.is_online
+    
     def format_number(self, number):
         """Format number."""
         if number.startswith("+"):

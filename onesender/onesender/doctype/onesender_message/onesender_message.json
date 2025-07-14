@@ -55,7 +55,7 @@
   },
   {
    "allow_in_quick_entry": 1,
-   "depends_on": "eval:((doc.content_type =='document' || doc.content_type =='image') && (doc.attach_with_doctype === 0))",
+   "depends_on": "eval:((doc.content_type =='Document' || doc.content_type =='Image') && (doc.attach_with_doctype === 0))",
    "fieldname": "attach",
    "fieldtype": "Attach",
    "label": "Attachment"
@@ -139,7 +139,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-10 15:22:55.073758",
+ "modified": "2025-07-14 20:56:04.029157",
  "modified_by": "Administrator",
  "module": "Onesender",
  "name": "Onesender Message",
