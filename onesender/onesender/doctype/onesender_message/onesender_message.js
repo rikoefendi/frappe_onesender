@@ -1,7 +1,35 @@
+const save_send_message = async (frm) => {
+			if(frm.is_dirty()) await frm.save()
+			
+			frappe.call({
+				method: "onesender.onesender.doctype.onesender_message.onesender_message.resend_message",
+				args: {
+					docname: frm.doc.name
+				},
+				freeze: true,
+				callback(r) {
+					if (r.message) {
+						frappe.msgprint(r.message);
+						frm.reload_doc();
+					}
+				}
+			});
+	}
+
 frappe.ui.form.on("Onesender Message", {
+	setup(frm){
+		frappe.ui.keys.add_shortcut({
+            shortcut: 'f2',
+            action: () => {
+                save_send_message(frm)
+            },
+            description: 'Save and Re/Send Message via shortcut',
+            action_label: 'Save and Re/Send Message'
+        });
+	},
 	onload(frm){
-		console.log(frm);
-		
+		frm.disable_save();
+
 	},
 	before_save(frm) {
 		if (frm.doc.__unsaved && frm.doc.attach) {
@@ -24,23 +52,13 @@ frappe.ui.form.on("Onesender Message", {
 		}
 	},
 	refresh(frm) {
-		frm.add_custom_button(__("Kirim Ulang"), () => {
-			frappe.call({
-				method: "onesender.onesender.doctype.onesender_message.onesender_message.resend_message",
-				args: {
-					docname: frm.doc.name
-				},
-				freeze: true,
-				callback(r) {
-					if (r.message) {
-						frappe.msgprint(r.message);
-						frm.reload_doc();
-					}
-				}
-			});
+		frm.add_custom_button(__(`Save & ${frm.is_new()?'Send': 'Resend'} (F2)`), async () => {
+			await save_send_message(frm)
 		});
-	},
+	}
 });
+
+
 
 // frappe.ui.form.on('Your Doctype Name', {
 //     refresh: function(frm) {
