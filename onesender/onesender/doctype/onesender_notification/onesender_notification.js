@@ -94,4 +94,14 @@ frappe.ui.form.on("Onesender Notification", {
 	reference_doctype: (frm) => {
 		frappe.notification.setup_fieldname_select(frm);
 	},
+	setup(frm){
+		frappe.ui.keys.add_shortcut({
+            shortcut: 'f2',
+            action: () => {
+                frm.save()
+            },
+            description: 'Save Notification via shortcut',
+            action_label: 'Save Notification'
+        });
+	},
 });

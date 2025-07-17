@@ -1,0 +1,53 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"zYHzAA6uXv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Onesender</span>\",\"col\":12}},{\"id\":\"sjPvgv9yaX\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rPx1KeCj9X\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Device\",\"col\":4}},{\"id\":\"J9j19KA5dM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Message\",\"col\":4}},{\"id\":\"Ef-B9zXply\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Notification\",\"col\":4}}]",
+ "creation": "2025-07-15 12:42:13.187890",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Onesender",
+ "links": [],
+ "modified": "2025-07-15 12:47:40.282614",
+ "modified_by": "Administrator",
+ "module": "Onesender",
+ "name": "Onesender",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 28.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Device",
+   "link_to": "Onesender Device",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Message",
+   "link_to": "Onesender Message",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Notification",
+   "link_to": "Onesender Notification",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Onesender"
+}

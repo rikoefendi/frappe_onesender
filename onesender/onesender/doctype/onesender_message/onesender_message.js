@@ -1,6 +1,6 @@
 const save_send_message = async (frm) => {
+			if(frm.is_new()) return frm.save()
 			if(frm.is_dirty()) await frm.save()
-			
 			frappe.call({
 				method: "onesender.onesender.doctype.onesender_message.onesender_message.resend_message",
 				args: {
@@ -26,9 +26,9 @@ frappe.ui.form.on("Onesender Message", {
             description: 'Save and Re/Send Message via shortcut',
             action_label: 'Save and Re/Send Message'
         });
+		frm.disable_save();
 	},
 	onload(frm){
-		frm.disable_save();
 
 	},
 	before_save(frm) {
