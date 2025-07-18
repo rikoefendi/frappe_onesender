@@ -16,6 +16,8 @@ class OnesenderDevice(Document):
 		if old:
 			if(self.secret != old.secret or self.url != old.url):
 				self.check(False)
+		else:
+			self.check(False)
 	def check(self, is_check = True):
 		headers = build_header(self.secret)
 		res = make_get_request(f"{self.url}/api/feeds", headers=headers)
