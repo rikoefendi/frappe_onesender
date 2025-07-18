@@ -153,7 +153,7 @@ def trigger_onesender_notification_today():
     return len(doc_list)
 
 def get_attach_doctype_link(doctype, docname, print_format="", no_letterhead=0, filename = None, attach_type: Literal["pdf", "image"] = "pdf"):
-    return frappe.utils.quote_urls(f"/api/method/onesender.attach_doctype.download_{attach_type}?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}&filename={filename or None}")
+    return frappe.utils.quote_urls(f"/api/method/onesender.attach_doctype.download_{attach_type}?doctype={doctype}&name={docname}&format={print_format}&no_letterhead={no_letterhead}&filename={filename}")
 
 
 

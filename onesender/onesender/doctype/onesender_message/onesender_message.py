@@ -100,7 +100,7 @@ class OnesenderMessage(Document):
             # print(device.name)
             sender = ""
             if device:
-                sender = f"{device.name or ""}-{device.phone or ""}"
+                sender = f"{device.name}-{device.phone}"
             self.data = json.dumps({
                 "text": data_text,
                 "attach": data_attach,
