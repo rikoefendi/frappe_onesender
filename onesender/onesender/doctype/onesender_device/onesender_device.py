@@ -13,8 +13,9 @@ class OnesenderDevice(Document):
 			frappe.db.set_value(self.doctype, {'is_default': 1}, 'is_default', 0)
 	def before_save(self):
 		old = self.get_doc_before_save()
-		if(self.secret != old.secret or self.url != old.url):
-			self.check(False)
+		if old:
+			if(self.secret != old.secret or self.url != old.url):
+				self.check(False)
 	def check(self, is_check = True):
 		headers = build_header(self.secret)
 		res = make_get_request(f"{self.url}/api/feeds", headers=headers)
