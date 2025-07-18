@@ -76,14 +76,14 @@ class OnesenderMessage(Document):
             }
         try:
             device, online = self.get_device()
-            if device:
-                if not online and not device.is_default:
-                    device, online = self.get_device(True)
+            # if device:
+            #     if not online and not device.is_default:
+            #         device, online = self.get_device(True)
 
-            else:
-                device, online = self.get_device(True)
-            if not device or not online:
-                frappe.throw("Device not set or offline", exc=frappe.ValidationError)
+            # else:
+            #     device, online = self.get_device(True)
+            if not device:
+                frappe.throw("Device not setted", exc=frappe.ValidationError)
 
             self.notify(device, data_text)
             if data_attach is not None:
